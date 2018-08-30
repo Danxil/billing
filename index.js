@@ -17,9 +17,9 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(bodyParser.json({ extended: true }));
-app.use('/free-kassa-info', proxy('fun-spin.com', {
+app.use('/free-kassa/info', proxy('fun-spin.com', {
   https: true,
-  proxyReqPathResolver: (req) => `/api/free-kassa/info`,
+  proxyReqPathResolver: (req) => `/api/free-kassa/info${url.parse(req.url).path}`,
 }));
 
 app.use(express.static(path.join(__dirname, 'client'), { index: false, extensions: false, redirect: false }));
