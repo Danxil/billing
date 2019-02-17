@@ -11,12 +11,11 @@ export default ({ app }) => {
   app.post('/by', async (req, res) => {
     const { email, product } = req.body;
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+      host: 'smtp.mailtrap.io',
+      port: 25,
       auth: {
-        user: 'danxilggggaa@gmail.com',
-        pass: '7d1cE3a813TKLM26',
+        user: '3e74387325b233',
+        pass: 'fda44516dcc8d1',
       },
     });
 
