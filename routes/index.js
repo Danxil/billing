@@ -1,5 +1,9 @@
 import path from 'path';
-import nodemailer from 'nodemailer';
+import sendgrid from 'sendgrid';
+
+const sgHelper = sendgrid.mail;
+const sg = sendgrid('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');
+
 
 export default ({ app }) => {
   app.get('/free-kassa/success', (req, res) => {
@@ -10,29 +14,30 @@ export default ({ app }) => {
   });
   app.post('/by', async (req, res) => {
     const { email, product } = req.body;
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.mailtrap.io',
-      port: 25,
-      auth: {
-        user: '3e74387325b233',
-        pass: 'fda44516dcc8d1',
-      },
+
+    const mail = new sgHelper.Mail(
+      new sgHelper.Email('danxilggggaa@cases-billing.live'),
+      'Купон от WebGuru',
+      new sgHelper.Email(email),
+      new sgHelper.Content(
+        'text/plain',
+        `Вы успешно совершили оплату купона со скидкой -20% на разработку продукта "${product}". В течении суток, наш менеджер свяжется с вами для уточнения деталей по вашему проекту.`,
+      ),
+    );
+
+    const request = sg.emptyRequest({
+      method: 'POST',
+      path: '/v3/mail/send',
+      body: mail.toJSON(),
     });
 
-    const mailOptions = {
-      from: '"WebGuru" <2b24d8fe66-c306cf@inbox.mailtrap.io>',
-      to: email,
-      subject: 'Купон от WebGuru',
-      text: `Вы успешно совершили оплату купона на скидку -20% на разработку продукта "${product}". В течении суток, наш менеджер свяжется с вами для уточнения деталей по вашему проекту.`,
-    };
-
-    try {
-      await transporter.sendMail(mailOptions);
-      res.send(200);
-    } catch (e) {
-      console.log(e);
-      res.send(500);
-    }
+    sg.API(request, (error) => {
+      if (error) {
+        res.status(500).send(error);
+      } else {
+        res.send(200);
+      }
+    });
   });
   app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../', 'client', 'index.html'));
