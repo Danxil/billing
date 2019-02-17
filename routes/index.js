@@ -20,7 +20,7 @@ export default ({ app }) => {
     });
 
     const mailOptions = {
-      from: '"WebGuru" <danxilggggaa@gmail.com>',
+      from: '"WebGuru" <2b24d8fe66-c306cf@inbox.mailtrap.io>',
       to: email,
       subject: 'Купон от WebGuru',
       text: `Вы успешно совершили оплату купона на скидку -20% на разработку продукта "${product}". В течении суток, наш менеджер свяжется с вами для уточнения деталей по вашему проекту.`,
