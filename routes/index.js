@@ -1,9 +1,7 @@
 import path from 'path';
-import sendgrid from 'sendgrid';
+import mg from 'mailgun-js';
 
-const sgHelper = sendgrid.mail;
-const sg = sendgrid('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');
-
+const mailgun = mg({ apiKey: process.env.MAILGUN_API_KEY, domain: 'cases-billing.live' });
 
 export default ({ app }) => {
   app.get('/free-kassa/success', (req, res) => {
@@ -15,26 +13,19 @@ export default ({ app }) => {
   app.post('/by', async (req, res) => {
     const { email, product } = req.body;
 
-    const mail = new sgHelper.Mail(
-      new sgHelper.Email('danxilggggaa@cases-billing.live'),
-      'Купон от WebGuru',
-      new sgHelper.Email(email),
-      new sgHelper.Content(
-        'text/plain',
-        `Вы успешно совершили оплату купона со скидкой -20% на разработку продукта "${product}". В течении суток, наш менеджер свяжется с вами для уточнения деталей по вашему проекту.`,
-      ),
-    );
+    const data = {
+      from: 'Web Guru <b30c3756cca4616d59b1@cloudmailin.net>',
+      to: email,
+      subject: 'Купон от WebGuru',
+      text: `Вы успешно совершили оплату купона со скидкой -20% на разработку продукта "${product}". В течении суток, наш менеджер свяжется с вами для уточнения деталей по вашему проекту.`,
+    };
 
-    const request = sg.emptyRequest({
-      method: 'POST',
-      path: '/v3/mail/send',
-      body: mail.toJSON(),
-    });
-
-    sg.API(request, (error) => {
+    mailgun.messages().send(data, (error, body) => {
       if (error) {
+        console.log(body);
         res.status(500).send(error);
       } else {
+        console.log(body);
         res.send(200);
       }
     });
