@@ -7,8 +7,9 @@ export default ({ app }) => {
   app.get('/free-kassa/success', (req, res) => {
     res.redirect('https://fun-spin.com/by-coins');
   });
-  app.get('/hp/adv-cash/success/', (req, res) => {
-    res.redirect('https://fast-credit.in');
+  app.get('/hp/:paymentSystem/success/', (req, res) => {
+    console.log(`Payment success ${req.params.paymentSystem}`);
+    res.send(200);
   });
   app.post('/by', async (req, res) => {
     const { email, product } = req.body;
