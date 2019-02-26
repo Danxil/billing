@@ -16,7 +16,8 @@ app.use(cors({
   credentials: true,
 }));
 app.use(cookieParser());
-app.use(bodyParser.json({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/free-kassa/info', proxy('fun-spin.com', {
   https: true,
   proxyReqPathResolver: req => `/api/free-kassa/info${url.parse(req.url).path}`,

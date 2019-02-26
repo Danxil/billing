@@ -1,14 +1,29 @@
 import path from 'path';
 import mg from 'mailgun-js';
+import request from 'request-promise';
+import paymentSuccess from '../controllers/paymentSuccess';
 
 const mailgun = mg({ apiKey: process.env.MAILGUN_API_KEY, domain: 'cases-billing.live' });
+
+const MERCHANTS_URLS = {
+  hp: {
+    successUrl: 'http://fast-credit.in/api/payment-success',
+  },
+};
 
 export default ({ app }) => {
   app.get('/free-kassa/success', (req, res) => {
     res.redirect('https://fun-spin.com/by-coins');
   });
-  app.get('/hp/:paymentSystem/success/', (req, res) => {
-    console.log(`Payment success ${req.params.paymentSystem}`);
+  app.post('/:paymentSystem/success/', async (req, res) => {
+    const { params: { paymentSystem }, body } = req;
+    const paymentEntity = paymentSuccess({ system: paymentSystem, body });
+    console.log(11, paymentEntity);
+    await request({
+      url: MERCHANTS_URLS[paymentEntity.merchant].successUrl,
+      method: 'POST',
+      json: paymentEntity,
+    });
     res.send(200);
   });
   app.post('/by', async (req, res) => {
@@ -23,10 +38,8 @@ export default ({ app }) => {
 
     mailgun.messages().send(data, (error, body) => {
       if (error) {
-        console.log(body);
         res.status(500).send(error);
       } else {
-        console.log(body);
         res.send(200);
       }
     });
