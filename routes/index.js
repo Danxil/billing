@@ -27,10 +27,10 @@ export default ({ app }) => {
         method: 'POST',
         json: paymentEntity,
       });
+      res.send(200);
     } catch (e) {
       res.status(400).send(e);
     }
-    res.send(200);
   });
   app.post('/:paymentSystem/success', ({ params: { paymentSystem }, body }, res) => {
     const paymentEntity = paymentSuccess({ system: paymentSystem, body });
