@@ -15,7 +15,7 @@ export default ({ app }) => {
   app.get('/free-kassa/success', (req, res) => {
     res.redirect('https://fun-spin.com/by-coins');
   });
-  app.post('/:paymentSystem/success/', async (req, res) => {
+  app.post('/:paymentSystem/info/', async (req, res) => {
     const { params: { paymentSystem }, body } = req;
     const paymentEntity = paymentSuccess({ system: paymentSystem, body });
     console.log(11, paymentEntity);
