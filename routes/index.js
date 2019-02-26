@@ -20,6 +20,7 @@ export default ({ app }) => {
     res.redirect('https://fun-spin.com/by-coins');
   });
   app.post('/:paymentSystem/info/', async ({ params: { paymentSystem }, body }, res) => {
+    console.log('Info!!!!', body);
     const paymentEntity = paymentSuccess({ system: paymentSystem, body });
     try {
       await request({
@@ -34,7 +35,7 @@ export default ({ app }) => {
   });
   app.post('/:paymentSystem/success/', ({ params: { paymentSystem }, body }, res) => {
     const paymentEntity = paymentSuccess({ system: paymentSystem, body });
-    res.redirect(MERCHANTS_URLS[paymentEntity.merchant].redirectUrl);
+    res.redirect(MERCHANTS_URLS[paymentEntity.merchant].successUrl);
   });
   app.post('/by', async (req, res) => {
     const { email, product } = req.body;

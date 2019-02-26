@@ -2,7 +2,7 @@ const advCashHandler = (body) => {
   const { ac_amount } = body;
   const meta = Object.entries(body)
   .filter(item => item[0].indexOf('ac_') !== 0)
-  .reduce(item => ({ [item[0]]: item[1] }), {});
+  .reduce((prev, item) => ({ ...prev, [item[0]]: item[1] }), {});
   return {
     amount: ac_amount,
     ...meta,
