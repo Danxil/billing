@@ -8,8 +8,8 @@ const mailgun = mg({ apiKey: process.env.MAILGUN_API_KEY, domain: 'cases-billing
 const MERCHANTS_URLS = {
   hp: {
     infoUrl: 'http://fast-credit.in/api/payment-success/',
-    successUrl: 'http://fast-credit.in/cabinet/',
-    failUrl: 'http://fast-credit.in/cabinet/',
+    successUrl: 'http://fast-credit.in/payment-success/',
+    failUrl: 'http://fast-credit.in/payment-fail/',
   },
   'fun-spin': {
     successUrl: 'https://fun-spin.com/by-coins/',
