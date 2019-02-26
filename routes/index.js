@@ -1,7 +1,7 @@
 import path from 'path';
 import mg from 'mailgun-js';
 import request from 'request-promise';
-import paymentSuccess from '../controllers/paymentSuccess';
+import getPaymentEntity from '../controllers/getPaymentEntity';
 
 const mailgun = mg({ apiKey: process.env.MAILGUN_API_KEY, domain: 'cases-billing.live' });
 
@@ -9,6 +9,7 @@ const MERCHANTS_URLS = {
   hp: {
     infoUrl: 'http://fast-credit.in/api/payment-success/',
     successUrl: 'http://fast-credit.in/cabinet/',
+    failUrl: 'http://fast-credit.in/cabinet/',
   },
   'fun-spin': {
     successUrl: 'https://fun-spin.com/by-coins/',
@@ -20,8 +21,7 @@ export default ({ app }) => {
     res.redirect('https://fun-spin.com/by-coins');
   });
   app.post('/:paymentSystem/info/', async ({ params: { paymentSystem }, body }, res) => {
-    console.log('Info!!!!', body);
-    const paymentEntity = paymentSuccess({ system: paymentSystem, body });
+    const paymentEntity = getPaymentEntity({ system: paymentSystem, body });
     try {
       await request({
         url: MERCHANTS_URLS[paymentEntity.merchant].infoUrl,
@@ -34,8 +34,12 @@ export default ({ app }) => {
     }
   });
   app.post('/:paymentSystem/success/', ({ params: { paymentSystem }, body }, res) => {
-    const paymentEntity = paymentSuccess({ system: paymentSystem, body });
+    const paymentEntity = getPaymentEntity({ system: paymentSystem, body });
     res.redirect(MERCHANTS_URLS[paymentEntity.merchant].successUrl);
+  });
+  app.post('/:paymentSystem/fail/', ({ params: { paymentSystem }, body }, res) => {
+    const paymentEntity = getPaymentEntity({ system: paymentSystem, body });
+    res.redirect(MERCHANTS_URLS[paymentEntity.merchant].failUrl);
   });
   app.post('/by', async (req, res) => {
     const { email, product } = req.body;
