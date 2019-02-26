@@ -32,7 +32,7 @@ export default ({ app }) => {
     }
     res.send(200);
   });
-  app.get('/:paymentSystem/success', ({ params: { paymentSystem }, body }, res) => {
+  app.post('/:paymentSystem/success', ({ params: { paymentSystem }, body }, res) => {
     const paymentEntity = paymentSuccess({ system: paymentSystem, body });
     res.redirect(MERCHANTS_URLS[paymentEntity.merchant].redirectUrl);
   });
