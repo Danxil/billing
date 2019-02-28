@@ -10,10 +10,11 @@ const advCashHandler = (data) => {
 };
 const payeerHandler = (data) => {
   console.log('payeer!!!!!!', data);
-  const { m_amount, m_params: { reference } } = data;
+  const { m_amount, m_params } = data;
+  const params = JSON.parse(m_params);
   return {
     amount: m_amount,
-    ...reference,
+    ...params.reference,
   };
 };
 

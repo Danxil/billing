@@ -21,8 +21,10 @@ export default ({ app }) => {
   app.get('/free-kassa/success', (req, res) => {
     res.redirect('https://fun-spin.com/by-coins');
   });
-  app.post('/:paymentSystem/info/', async ({ params: { paymentSystem }, body }, res) => {
-    const paymentEntity = getPaymentEntity({ system: paymentSystem, body });
+  app.all('/:paymentSystem/info/', async (req, res) => {
+    const { params: { paymentSystem } } = req;
+    const data = getPaymentSystemData({ req, paymentSystem });
+    const paymentEntity = getPaymentEntity({ system: paymentSystem, data });
     try {
       await request({
         url: MERCHANTS_URLS[paymentEntity.merchant].infoUrl,
@@ -34,14 +36,16 @@ export default ({ app }) => {
       res.status(400).send(e);
     }
   });
-  app.post('/:paymentSystem/success/', (req, res) => {
+  app.all('/:paymentSystem/success/', (req, res) => {
     const { params: { paymentSystem } } = req;
     const data = getPaymentSystemData({ req, paymentSystem });
     const paymentEntity = getPaymentEntity({ system: paymentSystem, data });
     res.redirect(MERCHANTS_URLS[paymentEntity.merchant].successUrl);
   });
-  app.post('/:paymentSystem/fail/', ({ params: { paymentSystem }, body }, res) => {
-    const paymentEntity = getPaymentEntity({ system: paymentSystem, body });
+  app.all('/:paymentSystem/fail/', (req, res) => {
+    const { params: { paymentSystem } } = req;
+    const data = getPaymentSystemData({ req, paymentSystem });
+    const paymentEntity = getPaymentEntity({ system: paymentSystem, data });
     res.redirect(MERCHANTS_URLS[paymentEntity.merchant].failUrl);
   });
   app.post('/by', async (req, res) => {
