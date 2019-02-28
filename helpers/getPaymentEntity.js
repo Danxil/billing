@@ -18,8 +18,8 @@ const payeerHandler = (data) => {
   };
 };
 
-export default ({ system, data }) => {
-  switch (system) {
+export default ({ paymentSystem, data }) => {
+  switch (paymentSystem) {
     case 'adv-cash':
       return advCashHandler(data);
     case 'payeer':

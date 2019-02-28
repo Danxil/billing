@@ -1,5 +1,5 @@
-export const finishPaymentSuccess = ({ system, data, res }) => {
-  switch (system) {
+export const finishPaymentSuccess = ({ paymentSystem, data, res }) => {
+  switch (paymentSystem) {
     case 'adv-cash':
       return res.send(200);
     case 'payeer':
@@ -8,8 +8,8 @@ export const finishPaymentSuccess = ({ system, data, res }) => {
       throw new Error('Worong payment system name!');
   }
 };
-export const finishPaymentError = ({ system, data, res }) => {
-  switch (system) {
+export const finishPaymentError = ({ paymentSystem, data, res }) => {
+  switch (paymentSystem) {
     case 'adv-cash':
       return res.send(400);
     case 'payeer':

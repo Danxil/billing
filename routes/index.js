@@ -25,7 +25,7 @@ export default ({ app }) => {
   app.all('/:paymentSystem/info/', async (req, res) => {
     const { params: { paymentSystem } } = req;
     const data = getPaymentSystemData({ req, paymentSystem });
-    const paymentEntity = getPaymentEntity({ system: paymentSystem, data });
+    const paymentEntity = getPaymentEntity({ paymentSystem, data });
     try {
       await request({
         url: MERCHANTS_URLS[paymentEntity.merchant].infoUrl,
@@ -41,13 +41,13 @@ export default ({ app }) => {
   app.all('/:paymentSystem/success/', (req, res) => {
     const { params: { paymentSystem } } = req;
     const data = getPaymentSystemData({ req, paymentSystem });
-    const paymentEntity = getPaymentEntity({ system: paymentSystem, data });
+    const paymentEntity = getPaymentEntity({ paymentSystem, data });
     res.redirect(MERCHANTS_URLS[paymentEntity.merchant].successUrl);
   });
   app.all('/:paymentSystem/fail/', (req, res) => {
     const { params: { paymentSystem } } = req;
     const data = getPaymentSystemData({ req, paymentSystem });
-    const paymentEntity = getPaymentEntity({ system: paymentSystem, data });
+    const paymentEntity = getPaymentEntity({ paymentSystem, data });
     res.redirect(MERCHANTS_URLS[paymentEntity.merchant].failUrl);
   });
   app.post('/by', async (req, res) => {
