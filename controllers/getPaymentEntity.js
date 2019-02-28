@@ -8,11 +8,21 @@ const advCashHandler = (body) => {
     ...meta,
   };
 };
+const payeerHandler = (body) => {
+  console.log('payeer!!!!!!', body);
+  const { m_amount, m_params: { reference } } = body;
+  return {
+    amount: m_amount,
+    ...reference,
+  };
+};
 
 export default ({ system, body }) => {
   switch (system) {
     case 'adv-cash':
       return advCashHandler(body);
+    case 'payeer':
+      return payeerHandler(body);
     default:
       throw new Error('Worong payment system name!');
   }
