@@ -2,6 +2,7 @@ import path from 'path';
 import mg from 'mailgun-js';
 import request from 'request-promise';
 import getPaymentEntity from '../controllers/getPaymentEntity';
+import getPaymentSystemData from '../helpers/getPaymentSystemData';
 
 const mailgun = mg({ apiKey: process.env.MAILGUN_API_KEY, domain: 'cases-billing.live' });
 
@@ -33,8 +34,10 @@ export default ({ app }) => {
       res.status(400).send(e);
     }
   });
-  app.post('/:paymentSystem/success/', ({ params: { paymentSystem }, body }, res) => {
-    const paymentEntity = getPaymentEntity({ system: paymentSystem, body });
+  app.post('/:paymentSystem/success/', (req, res) => {
+    const { params: { paymentSystem } } = req;
+    const data = getPaymentSystemData({ req, paymentSystem });
+    const paymentEntity = getPaymentEntity({ system: paymentSystem, data });
     res.redirect(MERCHANTS_URLS[paymentEntity.merchant].successUrl);
   });
   app.post('/:paymentSystem/fail/', ({ params: { paymentSystem }, body }, res) => {
