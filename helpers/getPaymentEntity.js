@@ -9,12 +9,10 @@ const advCashHandler = (data) => {
   };
 };
 const payeerHandler = (data) => {
-  console.log('payeer!!!!!!', data);
-  const { m_amount, m_params } = data;
-  const params = JSON.parse(m_params);
+  const { m_amount, m_orderid } = data;
   return {
     amount: m_amount,
-    ...params.reference,
+    merchant: m_orderid.split('_')[0],
   };
 };
 
