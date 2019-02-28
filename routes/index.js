@@ -3,7 +3,7 @@ import mg from 'mailgun-js';
 import request from 'request-promise';
 import getPaymentEntity from '../helpers/getPaymentEntity';
 import getPaymentSystemData from '../helpers/getPaymentSystemData';
-import finishPayment from '../controllers/finishPayment';
+import { finishPaymentSuccess, finishPaymentError } from '../controllers/finishPayment';
 
 const mailgun = mg({ apiKey: process.env.MAILGUN_API_KEY, domain: 'cases-billing.live' });
 
@@ -32,10 +32,10 @@ export default ({ app }) => {
         method: 'POST',
         json: paymentEntity,
       });
-      finishPayment({ paymentSystem, data, res });
+      finishPaymentSuccess({ paymentSystem, data, res });
     } catch (e) {
       console.log(e);
-      res.status(400).send(e);
+      finishPaymentError({ paymentSystem, data, res });
     }
   });
   app.all('/:paymentSystem/success/', (req, res) => {
