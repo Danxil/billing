@@ -10,14 +10,13 @@ const advCashHandler = (data) => {
   };
 };
 const payeerHandler = (data) => {
-  console.log('info!!!!', data);
-  const { m_amount, m_orderid, m_params } = data;
-  const meta = JSON.parse(m_params);
+  const { m_amount, m_orderid, m_params: mParams } = data;
+  const meta = mParams ? JSON.parse(mParams).reference : { reference: {} };
   return {
     amount: m_amount,
     merchant: m_orderid.split('_')[0],
     orderId: m_orderid,
-    ...meta.reference,
+    ...meta,
   };
 };
 
