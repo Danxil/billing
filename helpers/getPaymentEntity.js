@@ -1,11 +1,11 @@
 const advCashHandler = (data) => {
-  const { ac_amount, ac_orderid } = data;
+  const { ac_amount, ac_order_id } = data;
   const meta = Object.entries(data)
   .filter(item => item[0].indexOf('ac_') !== 0)
   .reduce((prev, item) => ({ ...prev, [item[0]]: item[1] }), {});
   return {
     amount: ac_amount,
-    orderId: ac_orderid,
+    orderId: ac_order_id,
     ...meta,
   };
 };
