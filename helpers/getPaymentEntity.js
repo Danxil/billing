@@ -21,7 +21,7 @@ const payeerHandler = (data) => {
 };
 const coinPaymentsHandler = (data) => {
   const { amount1, invoice, custom } = data;
-  const meta = JSON.parse(custom);
+  const meta = custom ? JSON.parse(custom) : {};
   if (data.status >= 100) {
     return {
       amount: parseFloat(amount1),
