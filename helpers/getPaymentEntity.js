@@ -33,10 +33,11 @@ const coinPaymentsHandler = (data) => {
   };
 };
 const perfectMoneyHandler = (data) => {
+  const customPrefix = 'custom_';
   const { PAYMENT_AMOUNT, PAYMENT_ID, ...others } = data;
   const meta = Object.entries(others)
-  .filter(item => item[0].indexOf('custom_') === 0)
-  .reduce((prev, item) => ({ ...prev, [item[0]]: item[1] }), {});
+  .filter(item => item[0].indexOf(customPrefix) === 0)
+  .reduce((prev, item) => ({ ...prev, [item[0].replace(new RegExp('custom_'), '')]: item[1] }), {});
   return {
     amount: parseFloat(PAYMENT_AMOUNT),
     merchant: PAYMENT_ID.split('_')[0],
