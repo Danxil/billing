@@ -19,6 +19,19 @@ const payeerHandler = (data) => {
     ...meta,
   };
 };
+const coinPaymentsHandler = (data) => {
+  const { amount1, invoice, custom } = data;
+  const meta = JSON.parse(custom);
+  if (data.status >= 100) {
+    return {
+      amount: amount1,
+      merchant: invoice.split('_')[0],
+      orderId: invoice,
+      ...meta,
+    };
+  }
+  return null;
+};
 
 export default ({ paymentSystem, data }) => {
   switch (paymentSystem) {
@@ -26,6 +39,8 @@ export default ({ paymentSystem, data }) => {
       return advCashHandler(data);
     case 'payeer':
       return payeerHandler(data);
+    case 'coin-payments':
+      return coinPaymentsHandler(data);
     default:
       throw new Error('Worong payment system name!');
   }

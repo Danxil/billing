@@ -23,6 +23,8 @@ export default ({ app }) => {
     res.redirect('https://fun-spin.com/by-coins');
   });
   app.all('/:paymentSystem/info/', async (req, res) => {
+    console.log('-------info', req.body);
+    console.log('-------info', req.query);
     const { params: { paymentSystem } } = req;
     const data = getPaymentSystemData({ req, paymentSystem });
     const paymentEntity = getPaymentEntity({ paymentSystem, data });
@@ -39,6 +41,8 @@ export default ({ app }) => {
     }
   });
   app.all('/:paymentSystem/success/', (req, res) => {
+    console.log('-------success', req.body);
+    console.log('-------success', req.query);
     const { params: { paymentSystem } } = req;
     const data = getPaymentSystemData({ req, paymentSystem });
     const paymentEntity = getPaymentEntity({ paymentSystem, data });
