@@ -28,16 +28,17 @@ export default ({ app }) => {
     const { params: { paymentSystem } } = req;
     const data = getPaymentSystemData({ req, paymentSystem });
     const paymentEntity = getPaymentEntity({ paymentSystem, data });
+    if (!paymentEntity) return finishPaymentError({ paymentSystem, data, res });
     try {
       await request({
         url: MERCHANTS_URLS[paymentEntity.merchant].infoUrl,
         method: 'POST',
         json: paymentEntity,
       });
-      finishPaymentSuccess({ paymentSystem, data, res });
+      return finishPaymentSuccess({ paymentSystem, data, res });
     } catch (e) {
       console.log(e);
-      finishPaymentError({ paymentSystem, data, res });
+      return finishPaymentError({ paymentSystem, data, res });
     }
   });
   app.all('/:paymentSystem/success/', (req, res) => {
