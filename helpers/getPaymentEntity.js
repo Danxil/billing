@@ -33,8 +33,10 @@ const coinPaymentsHandler = (data) => {
   return null;
 };
 const perfectMoneyHandler = (data) => {
-  const { PAYMENT_AMOUNT, PAYMENT_ID, meta: custom } = data;
-  const meta = JSON.parse(custom);
+  const { PAYMENT_AMOUNT, PAYMENT_ID, ...others } = data;
+  const meta = Object.entries(others)
+  .filter(item => item[0].indexOf('custom_') === 0)
+  .reduce((prev, item) => ({ ...prev, [item[0]]: item[1] }), {});
   if (data.status >= 100) {
     return {
       amount: parseFloat(PAYMENT_AMOUNT),
