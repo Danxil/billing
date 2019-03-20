@@ -28,7 +28,7 @@ export default ({ app }) => {
     const { params: { paymentSystem } } = req;
     const data = getPaymentSystemData({ req, paymentSystem });
     const paymentEntity = getPaymentEntity({ paymentSystem, data });
-    if (!paymentEntity) return finishPaymentError({ paymentSystem, data, res });
+    if (paymentEntity.status !== 'done') return finishPaymentError({ paymentSystem, data, res });
     try {
       await request({
         url: MERCHANTS_URLS[paymentEntity.merchant].infoUrl,

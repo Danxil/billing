@@ -6,6 +6,7 @@ const advCashHandler = (data) => {
   return {
     amount: parseFloat(ac_amount),
     orderId: ac_order_id,
+    status: 'done',
     ...meta,
   };
 };
@@ -16,21 +17,20 @@ const payeerHandler = (data) => {
     amount: parseFloat(m_amount),
     merchant: m_orderid.split('_')[0],
     orderId: m_orderid,
+    status: 'done',
     ...meta,
   };
 };
 const coinPaymentsHandler = (data) => {
   const { amount1, invoice, custom } = data;
   const meta = custom ? JSON.parse(custom) : {};
-  if (data.status >= 100) {
-    return {
-      amount: parseFloat(amount1),
-      merchant: invoice.split('_')[0],
-      orderId: invoice,
-      ...meta,
-    };
-  }
-  return null;
+  return {
+    amount: parseFloat(amount1),
+    merchant: invoice.split('_')[0],
+    orderId: invoice,
+    ...meta,
+    status: data.status >= 100 ? 'done' : 'notDone',
+  };
 };
 const perfectMoneyHandler = (data) => {
   const { PAYMENT_AMOUNT, PAYMENT_ID, ...others } = data;
@@ -42,6 +42,7 @@ const perfectMoneyHandler = (data) => {
     merchant: PAYMENT_ID.split('_')[0],
     orderId: PAYMENT_ID,
     ...meta,
+    status: 'done',
   };
 };
 
